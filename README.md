@@ -1,4 +1,3 @@
-
 ## Algorithm principle
 
 The Apriori algorithm is used to recognize item sets, which appear frequently in a data set, and infer a categorization from it. It says that if a set is frequent, its subsets are frequent too. In easy words, if {Milk, Apple} is a frequent item set, {Milk} and {Apple} are frequent item sets too.
