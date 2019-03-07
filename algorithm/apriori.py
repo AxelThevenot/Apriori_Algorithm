@@ -90,7 +90,7 @@ def scanDataSet(dataset, Ck, minSupport):
     Function to generate Lk from Ck
     :param D: dataset
     :param Ck: candidates of k items
-    :param minSupport: value of support value interested in
+    :param minSupport: value of support value of interest
     :return: return Lk, dict of support values
     """
     # we create a dict of value to count the amount of transaction supported by candidate
@@ -139,7 +139,7 @@ def calculateConfidence(freqentSet, H, supportData, rules, minConf=0.7):
     :param H: list of items that could be on the right-hand side of a rule
     :param supportData: supportData from Apriori algorithm
     :param rules: list of all the rules implied by L
-    :param minConf: minimum confidence interested in
+    :param minConf: minimum confidence of interest
     :return: all the rules implied by H
     """
     prunedH = [] # create new list to return
@@ -158,7 +158,7 @@ def rulesFromConsequence(freqSet, H, supportData, rules, minConf=0.7):
     :param H: list of items that could be on the right-hand side of a rule
     :param supportData: supportData from Apriori algorithm
     :param rules: list of all the rules implied by L
-    :param minConf: minimum confidence interested in
+    :param minConf: minimum confidence of interest
     """
     m = len(H[0])
     if (len(freqSet) > (m + 1)): # try further merging
@@ -240,7 +240,7 @@ def createRuleHeatmap(rules):
         rules_confidence[row.index(str(list(rule[1]))), column.index(str(list(rule[0])))] = rule[2]
 
     # finally create the plot (HeatMap)
-    fig, axis = plt.subplots()  # il me semble que c'est une bonne habitude de faire supbplots
+    fig, axis = plt.subplots() 
     heatmap = axis.pcolor(rules_confidence, cmap=plt.cm.Blues)  # heatmap contient les valeurs
 
     axis.set_yticks(np.arange(rules_confidence.shape[0]) + 0.5, minor=False)
