@@ -1,20 +1,22 @@
 ## Algorithm principle
 
-The Apriori algorithm is used to recognize item sets, which appear frequently in a data set, and infer a categorization from it. It says that if a set is frequent, its subsets are frequent too. In easy words, if {Milk, Apple} is a frequent item set, {Milk} and {Apple} are frequent item sets too.
+The Apriori algorithm is used to recognize item sets, which frequently appear in a data set and infer a categorization from it. It means that if a set is frequent, its subsets are frequent too. In easy words, if {Milk, Apple} is a frequent item set, {Milk} and {Apple} are frequent item sets too.
 
 ## Relationships association
 
-Now imagine running the algorithm for a list of transaction, which can be composed by 15 different items. If we check frequency of each 1 300 billion item sets it is a really time-consuming task and an impossible task if there are more items. That's why the Apriori algorithm need a minimum support (between 0 and 1). If the occurrence of an item set is lower than the minimum support, its supersets can't have an occurrence greater than this minimum support. The Apriori algoritmh work on this principle. 
+Now imagine running the algorithm for a list of transactions, which can be composed of 15 different items. Checking the frequency of all the possible combinations of those 15 items (ca. 1 300 billion item sets) would be a time-consuming task and even impossible if there are more items. That is why the Apriori algorithm needs a minimum support (between 0 and 1). If the occurrence of an item set is lower than the minimum support, its supersets can not have an occurrence greater than this minimum support. The Apriori algoritmh works on this principle. 
 
 
-We are looking for all relationships with the Apriori algorithm. There is two case of association : 
-* Frequent item sets that are in the collection of every item set that occurs more than the minimum support
-* Association rule as Itemset ? SuperItemset. A rule is in this collection if the confidence is greater than the minimum confidence given. The confidence is defined by support(Itemset | SuperItemset)/ support(Itemset)
-Looking for hidden relationships in large data sets is known as association analysis or association rule learning. The problem is, finding different combinations of items can be a time-consuming task and prohibitively expensive in terms of computing power.
+The Apriori algotrithm aims at identifying relationships between the item(s) combinations. 
+
+Two cases of association can be found : 
+* Frequent item sets are in the collection of every item set that occurs more than the minimum support
+* Collection of association rule as "Itemset --> SuperItemset". A rule is in this collection if the confidence is greater than the minimum confidence given. The confidence is defined by support(Itemset | SuperItemset)/ support(Itemset)
+Looking for hidden relationships in large data sets is known as association analysis or association rule learning. 
 
 ## Dataset
 
-In this case we will use a data set of transactions to an easier understanding. 
+In this case we will use a data set of transactions for the sake of understanding. 
 
 ```python 
 def loadDataSet():
@@ -36,14 +38,14 @@ k=1
 
 Create a list Ck of candidate itemsets of length k
 
-Scan the dataset to return Lk which is composed by the itemsets of each frequent itemset in Ck
+Scan the dataset to return Lk which is composed of the itemsets of each frequent itemset in Ck
 
-Repeat the 2 last lines with k+1 while Lk isn't an empty set.
+Repeat the last 2 lines with k+1 while Lk is not an empty set.
 ```
 
 # Let's start with python
 
-So first we create a function to return the first array of candidate C1 composed by every single item in the data set.
+The first step is to create a function to return the first array of candidate C1 composed of every single item in the data set.
 
 ```python 
 def Candidate_1(dataSet):
@@ -62,7 +64,7 @@ def Candidate_1(dataSet):
     # we frozen the itemset to use it as a key dict
     return list(map(frozenset, C1))
 ```
-Now we create the function to return the frequent item sets in the data set. This function takes three arguments: a dataset, the list of  a list of candidate sets Ck, and the minimum support interested in. This is the function we will use to generate L1 from C1. This function returns also a dictionary with support values.
+The second step is to create the function to return the frequent item sets in the data set. This function takes three arguments: a dataset, the list of  a list of candidate sets Ck, and the minimum support of interest. This is the function we will use to generate L1 from C1. This function returns also a dictionary with support values.
 
 ```python 
 def scanDataSet(dataset, Ck, minSupport):
@@ -103,7 +105,7 @@ L1, support_1 = scanDataSet(dataset, C1, minSupport)
 print("L1 : ", L1)
 print("support 1 : ", support_1)
 ```
-We can see the items {Milk}, {water}, {Sugar} and {Ice cream} have their support lower than the minimum support so there aren't frequent item sets in L1
+We can see that the items {Milk}, {water}, {Sugar} and {Ice cream} have their support value lower than the minimum support so there are not frequent item sets in L1
 
 [Output]
 
@@ -112,13 +114,13 @@ C1 :  [frozenset({'Apple'}), frozenset({'Corn'}), frozenset({'Milk'}), frozenset
 L1 :  [frozenset({'Flour'}), frozenset({'Yogurt'}), frozenset({'Orange Juice'}), frozenset({'Corn'}), frozenset({'Apple'})]
 support 1 :  {frozenset({'Apple'}): 0.6, frozenset({'Corn'}): 0.8, frozenset({'Milk'}): 0.4, frozenset({'Orange Juice'}): 1.0, frozenset({'Yogurt'}): 0.8, frozenset({'Flour'}): 0.6, frozenset({'Water'}): 0.4, frozenset({'Sugar'}): 0.2, frozenset({'Ice cream'}): 0.2}
 ```
-So now let's create the function to create k-sized candidate from Lk-1. This function takes two arguments, the frequent item sets of size k-1 Lkminus1 and the size of the new item sets k. It will create a set of candidates composed by the union of each item sets of Lkminus1 and each item in theses item sets.
+Then, we create the function to create k-sized candidates from Lk-1. This function takes two arguments, the frequent item sets of size k-1 Lkminus1 and the size of the new item sets k. It will create a set of candidates composed of the union of each item sets of Lkminus1 and of each item in these item sets.
 
 ```python 
 def Candidate_k(Lkminus1, k):
     """
     Create C[k] from L[k-1] and k
-    :param Lkminus1: the frequents itemsets (k-1)-sized
+    :param Lkminus1: the frequent itemsets (k-1)-sized
     :param k: k if the size of itemsets
     :return: Ck
     """
@@ -134,7 +136,7 @@ def Candidate_k(Lkminus1, k):
     return Ck
 ```
 
-All the functions needed to run the Apriori function are made. We can define the Apriori function that takes two arguments, the dataset and the minimum support interested in. This function will return an array of all Lk and the dictionnary of every candidate's support. 
+All the functions needed to run the Apriori function are now ready. We can define the Apriori function that takes two arguments, the dataset and the minimum support of interest. This function will return an array of all Lk and the dictionnary of every candidate's support. 
 
 ```python 
 def Apriori(dataset, minSupport):
@@ -180,11 +182,11 @@ frequent itemsets of size 4 : []
 ## Generating rules 
 
 To find association rules, we first start with a frequent item set. We know this set of items is unique, but we want to see if there is anything else we can get out of these items. One item or one set of items can imply another item.
-Remind that is as Itemset ? SuperItemset. A rule is in this collection if the confidence is greater than the minimum confidence given. The confidence is defined by support(Itemset | SuperItemset)/ support(Itemset)
+As a reminder : Itemset --> SuperItemset. A rule is in this collection if the confidence is greater than the minimum confidence given. The confidence is defined by support(Itemset | SuperItemset)/ support(Itemset)
 
 generateRules(), is the main command, which calls the other two.
 
-The generateRules() function takes three inputs: a list of frequent item sets, a dictionary of support data for those item sets, and a minimum confidence we are interested in. It’s going to generate a list of rules with confidence values that we can sort later.
+The generateRules() function takes three inputs: a list of frequent item sets, a dictionary of support data for those item sets, and a minimum confidence we are interested in. It will generate a list of rules with confidence values that we can sort later.
 ```python
 def generateRules(L, supportData, minConf=0.7):
     """
@@ -205,8 +207,8 @@ def generateRules(L, supportData, minConf=0.7):
                 calculateConfidence(freqentSet, H1, supportData, rules, minConf)
     return rules
 ```
-As we can see there is the two functions calculateConfidence() and rulesFromConsequence() called by generateRules(). 
-calculateConfidence(), which calculates the confidence of the rule and then finds out the which rules meet the minimum confidence. It takes five arguments, a frequent item set, the list H of item sets that could be the consequence of the frequent item set, the support dictionary given by the Apriori algorithm, the list of rules we want to implement and the minimum confidence we are interested in.   
+As we can see there are two functions calculateConfidence() and rulesFromConsequence() called by generateRules(). 
+calculateConfidence(), which calculates the confidence of the rule and then finds out the rules meeting the minimum confidence. It takes five arguments, a frequent item set, the list H of item sets that could be the consequence of the frequent item set, the support dictionary given by the Apriori algorithm, the list of rules we want to implement and the minimum confidence we are interested in.   
 
 ```python
 def calculateConfidence(freqentSet, H, supportData, rules, minConf=0.7):
@@ -216,7 +218,7 @@ def calculateConfidence(freqentSet, H, supportData, rules, minConf=0.7):
     :param H: list of items that could be on the right-hand side of a rule
     :param supportData: supportData from Apriori algorithm
     :param rules: list of all the rules implied by L
-    :param minConf: minimum confidence interested in
+    :param minConf: minimum confidence of interest
     :return: all the rules implied by H
     """
     prunedH = [] # create new list to return
@@ -228,7 +230,8 @@ def calculateConfidence(freqentSet, H, supportData, rules, minConf=0.7):
             prunedH.append(conseq)
     return prunedH
 ```
-generateRules(), which generate new associations by merging the existing one recursively. It takes the same five arguments that the previous function calculateConfidence()
+generateRules(), which generates new associations by merging the existing ones recursively. It takes the same five arguments that the previous function calculateConfidence()
+
 ```python 
 def rulesFromConsequence(freqSet, H, supportData, rules, minConf=0.7):
     """
@@ -237,7 +240,7 @@ def rulesFromConsequence(freqSet, H, supportData, rules, minConf=0.7):
     :param H: list of items that could be on the right-hand side of a rule
     :param supportData: supportData from Apriori algorithm
     :param rules: list of all the rules implied by L
-    :param minConf: minimum confidence interested in
+    :param minConf: minimum confidence of interest in
     """
     m = len(H[0])
     if (len(freqSet) > (m + 1)): # try further merging
@@ -246,8 +249,7 @@ def rulesFromConsequence(freqSet, H, supportData, rules, minConf=0.7):
         if (len(Hmp1) > 1):    # need at least two sets to merge
             rulesFromConsequence(freqSet, Hmp1, supportData, rules, minConf)
 ```
-Every function is now written for the Apriori algorithm. Before trying to render the output, let's start by trying these new functions for rules
-
+Each function is now written for the Apriori algorithm. Before trying to render the output, the new functions for the associations rules must be tested.
 
 ```python 
 dataset = loadDataSet()
@@ -277,10 +279,10 @@ for _, rule in enumerate(rules):
 ## Rendering
 
 We want now to display our results from our algorithm. I personally choose to make two different plots : 
-* A graph of node to display the frequent item sets
+* A graph of nodes to display the frequent item sets
 * A heatmap to display rules 
 
-We need to import numpy, networkx to make especially for the graph and matplotlib.pyplot to plot these rendering
+We need to import numpy, networkx especially for the graph and matplotlib.pyplot to plot these rendering
 
 ```python 
 import numpy as np
@@ -288,7 +290,7 @@ import networkx as nx
 import matplotlib.pyplot as plt
 ```
 
-Let's begin with the graph. The function takes two arguments, the frequent item sets L and the support dictionary. To do the best I choose to color each node according to its frequency (support) and each edge according to its confidence. The more it is dark, the more it is a great value.
+Graph creation : the function takes two arguments, the frequent item sets L and the support dictionary. For an easier reading I choose to color each node according to its frequency (support) and each edge according to its confidence. The darker, the greater value.
 
 
 ```python 
@@ -348,8 +350,8 @@ Here we can see the render as a png file. We can interpret this graph by :
 
 ![](graph.png)
 
-As we can see it is pretty hard to discuss the rules with this graph, so we will create a Heatmap of "what item sets (column)  involve what item (row)".
-It works with the same principle of the previous graph. This function takes only these rules as argument
+As we can see it is pretty hard to discuss the rules with this graph, so we will create a heatmap of "what item sets (column)  involve what item (row)".
+It works with the same principle as the previous graph. This function takes only the rules as argument.
 
 ```python 
 def createRuleHeatmap(rules):
@@ -372,7 +374,7 @@ def createRuleHeatmap(rules):
         rules_confidence[row.index(str(list(rule[1]))), column.index(str(list(rule[0])))] = rule[2]
 
     # finally create the plot (HeatMap)
-    fig, axis = plt.subplots()  # il me semble que c'est une bonne habitude de faire supbplots
+    fig, axis = plt.subplots()  
     heatmap = axis.pcolor(rules_confidence, cmap=plt.cm.Blues)  # heatmap contient les valeurs
 
     axis.set_yticks(np.arange(rules_confidence.shape[0]) + 0.5, minor=False)
@@ -388,7 +390,7 @@ def createRuleHeatmap(rules):
     plt.show()
 ```
 
-Remember the rules were 
+As a reminder the rules were :
 
 ```
 ['Orange Juice'] --> ['Apple'] with a confidence of 1.0
