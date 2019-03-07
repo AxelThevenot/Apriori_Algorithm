@@ -290,7 +290,7 @@ import networkx as nx
 import matplotlib.pyplot as plt
 ```
 
-Graph creation : the function takes two arguments, the frequent item sets L and the support dictionary. For a better display I choose to color each node according to its frequency (support) and each edge according to its confidence. The darker, the greater value.
+Graph creation : the function takes two arguments, the frequent item sets L and the support dictionary. For a better display I choose to color each node according to its frequency (support) and each edge according to its confidence. The darkest it is the greatest value it is .
 
 
 ```python 
