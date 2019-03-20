@@ -348,7 +348,7 @@ Here we can see the render as a png file. We can interpret this graph by :
 * {Apple, Orange juice} often implied the {Apple} buying
 * {Apple, Orange juice} not often implied the {Orange juice} buying
 
-![](graph.png)
+![](/src/graph.png)
 
 As we can see it is pretty hard to discuss the rules with this graph, so we will create a heatmap of "what item sets (column)  involve what item (row)".
 It works with the same principle as the previous graph. This function takes only the rules as argument.
@@ -409,4 +409,4 @@ As a reminder the rules were :
 Now the heatmap below shows the same confidences with colors.
 
 
-![](heatmap.png)
+![](/src/heatmap.png)
